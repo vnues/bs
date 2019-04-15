@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>相册</title>
+		<link rel="stylesheet" href="/public/css/main.css" id="lickCSS" />
+		<!--<link rel="stylesheet" href="css/module3d.css" />-->
+	</head>
+
+	<body>
+		
+		<div class="p-content">
+			<div class="bg">
+				 <div class="header">
+				<h1><span>潇湘雨 </span></h1>
+				<p>无论何事，你们愿意人怎样待你，你们也要怎样待人。</p>
+			</div>
+			<div class="b_nav">
+				<div id="nav">
+					<ul>
+						<li>
+							<a href="/index">网站首页</a>
+						</li>
+						<li>
+							<a href="/web">web前端</a>
+						</li>
+
+						<li>
+							<a href="/ui">UI设计</a>
+						</li>
+
+						<li>
+							<a href="/back">程序后台</a>
+						</li>
+
+						<li>
+							<a href="/new">新媒体</a>
+						</li>
+
+						<li>
+							<a href="/about">关于我</a>
+						</li>
+
+						<li>
+							<a href="/words">留言板</a>
+						</li>
+
+						<li>
+							<a class="active" href="/3d/photo">相册</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			</div>
+			<header class="photoH">
+				<h1><span id="light" style="display:none;">画廊幻灯片</span></h1>
+				<em id="range">平铺排列</em>
+				<em id="module3d">view3D</em>
+			</header>
+			<section id="pic_body">
+				<ul id="list">
+					<!--<li>
+					<span>
+						<a href="javascript:"></a>
+						<img src="img/0.jpg" />
+						<strong></strong>
+					</span>
+				</li>-->
+				</ul>
+				<span id="next" class="btn">></span>
+				<span id="prev" class="btn"><</span>
+				<span id="next3d">></span>
+				<span id="prev3d"><</span>
+				<div id="box3D">
+					<div id="box">
+						<div class="one"></div>
+						<div class="two"></div>
+						<div class="three"></div>
+						<div class="four"></div>
+						<div class="five"></div>
+						<div class="six"></div>
+					</div>
+				</div>
+			</section>
+		</div>
+		
+			
+			
+	   <canvas id="starts">该浏览器不支持canvas</canvas>
+		<!--以绝对路径写  会拼接的  相当于是个接口请求      静态资源代理了-->
+		<script src="/public/js/myMove.js"></script>
+		<script src="/public/js/move10.js"></script>
+		<script src="/public/js/main.js"></script>
+	</body>
+
+</html>
+<script src="/public/js/cosmos_canvas.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	//canvas的id名，星星颜色(hsla的hue色调)，星星数量，星星半径比，星星移动范围(值越大范围越小)，星星移动速度(值越大速度越慢),星星拖尾效果(0~1值越小拖尾越明显)
+	canvas("starts", 230, 400, 60, 2, 50000, 0.4)
+</script>
+<style>
+	.p-content{
+		position: absolute;
+		width:100%;
+		height:800px;
+		z-index: 999;
+		
+	}
+	.header {
+		width: 1000px;
+		margin: auto;
+		padding-top: 40px;
+		
+	}
+	
+	.header h1 {
+		font-size: 36px;
+		text-shadow: #fff 1px 1px 1px;
+		font-family: 'Arizonia', cursive;
+		padding: 0;
+		margin: 0;
+	}
+	/* google 在线字体 Arizonia */
+	
+	.header p {
+		font-size: 12px;
+	}
+	
+	.header h1 a {
+		color: #000;
+		-webkit-transition: all 0.5s;
+		-moz-transition: all 0.5s;
+		-o-transition: all 0.5s;
+	}
+	
+	.header h1 a:hover {
+		padding-left: 20px
+	}
+	
+	.photoH {
+		position: relative;
+		margin-top: 20px;
+	}
+	
+	html,
+	body {
+		width: 100% !important;
+		height: 100% !important;
+		
+	}
+	
+	.b_nav #nav a {
+		text-decoration: none;
+		/*display: inline-block;*/
+		font-size: 12px;
+	}
+	
+	.b_nav {
+		position: relative;
+		height: 40px;
+	}
+	
+	.b_nav {
+		background: rgba(245, 245, 245, 0.2);
+		width: 100%;
+		margin-top: 20px;
+	}
+	
+	.header p {
+		margin: 17px 0 0 0;
+		text-shadow: #000 0px 1px 2px;
+		color: #fff
+	}
+	
+	.navswf {
+		position: relative;
+		width: 1000px;
+		margin: auto;
+		margin-top: 30px;
+	}
+	
+	#nav {
+		line-height: 40px;
+		width: 100%;
+		height: 40px;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+	}
+	/* nav圆角背景 rgba 透明度0.2 */
+	
+	#nav ul {
+		list-style: none;
+		text-align: left;
+		width: 1000px;
+		margin: auto;
+	}
+	
+	#nav ul li {
+		display: inline;
+		float: left;
+		/*width: 110px;*/
+	}
+	
+	#nav ul li a {
+		color: #FFF;
+		padding: 15px 30px;
+		-webkit-transition: all 0.5s;
+		-moz-transition: all 0.5s;
+		-o-transition: all 0.5s;
+		-ms-transition: all 0.5s;
+		text-shadow: #000 4px 2px 2px;
+	}
+	/* 背景颜色过渡效果 */
+	
+	#nav ul li a:hover {
+		background: #e15782;
+		color: #FFF;
+		border-radius: 0px 50px;
+	}
+	
+	#nav ul li a.active {
+		background: #e15782;
+		color: #FFF;
+		border-radius: 0px 50px;
+	}
+	
+	#nav ul li a#nav_current {
+		background: #e15782;
+		border-radius: 0 50px;
+	}
+	/* nav高亮显示背景颜色 */
+</style>

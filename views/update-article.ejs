@@ -1,0 +1,210 @@
+<%-include('common');%>
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+	<div class="row">
+
+		<div class="col-md-9">
+			<h1 class="page-header">撰写新文章</h1>
+			<div class="form-group">
+				<label for="article-title" class="sr-only">标题</label>
+				<input type="text" id="article-title" name="title" class="form-control" placeholder="在此处输入标题" required
+					autofocus autocomplete="off">
+			</div>
+			<div class="form-group">
+				<label for="article-content" class="sr-only">内容</label>
+			</div>
+			<div id="my-editormd">
+				<textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc"
+					style="display:none;"><%=Oldessay.essay.markdown%></textarea>
+
+			</div>
+			<div id="html-editormd">
+				<textarea id="test-editormd-html-code" name="my-editormd-html-code" style="display:none;">
+
+					  </textarea>
+			</div>
+		</div>
+
+		<div class="col-md-3">
+			<h1 class="page-header">操作</h1>
+			<div class="add-article-box">
+				<h2 class="add-article-box-title"><span>栏目</span></h2>
+				<div class="add-article-box-content">
+					<ul class="category-list">
+						<li>
+							<label>
+								<input name="category" type="radio" value="1" checked>
+								地理风俗 <em class="hidden-md">( 栏目ID: <span>1</span> )</em></label>
+						</li>
+						<li>
+							<label>
+								<input name="category" type="radio" value="2">
+								名人贤士 <em class="hidden-md">( 栏目ID: <span>2</span> )</em></label>
+						</li>
+						<li>
+							<label>
+								<input name="category" type="radio" value="3">
+								民间艺术<em class="hidden-md">( 栏目ID: <span>3</span> )</em></label>
+						</li>
+						<li>
+							<label>
+								<input name="category" type="radio" value="4">
+								旅游景点 <em class="hidden-md">( 栏目ID: <span>4</span> )</em></label>
+						</li>
+						<li>
+							<label>
+								<input name="category" type="radio" value="5">
+								教育基地<em class="hidden-md">( 栏目ID: <span>5</span> )</em></label>
+						</li>
+						<li>
+							<label>
+								<input name="category" type="radio" value="6">
+								潮州名片<em class="hidden-md">( 栏目ID: <span>6</span> )</em></label>
+						</li>
+
+						<li>
+							<label>
+								<input name="category" type="radio" value="7">
+								后记<em class="hidden-md">( 栏目ID: <span>7</span> )</em></label>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="add-article-box">
+				<h2 class="add-article-box-title"><span>发布</span></h2>
+				<div class="add-article-box-footer">
+					<div style="float:right;margin-top:20px;" class="btn btn-primary" type="button" id="readyButton">发布
+						</d>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+<style type="text/css">
+	.w-e-text-container {
+		height: 500px !important;
+	}
+
+	.add-article-box {
+		position: relative;
+	}
+
+	#title-pic-box {
+		/*width:100%;*/
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	#pic-box input {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+		z-index: 999;
+		/*如果再次更换*/
+	}
+
+	#title-pic-box img {
+		position: absolute;
+		top: 60px;
+		left: 160px;
+		z-index: 99;
+		/*text-align: center;*/
+		/*margin:0 auto;*/
+	}
+</style>
+<link rel="stylesheet" href="/public/css/editormd.css" />
+<script src="/public/js/jquery-2.1.4.min.js"></script>
+<script src="/public/js/marked.min.js"></script>
+<script src="/public/js/prettify.min.js"></script>
+<script src="/public/js/raphael.min.js"></script>
+<script src="/public/js/underscore.min.js"></script>
+<script src="/public/js/sequence-diagram.min.js"></script>
+<script src="/public/js/flowchart.min.js"></script>
+<script src="/public/js/jquery.flowchart.min.js"></script>
+
+<script type="text/javascript" src="/public/js/editormd.js"></script>
+<script src="/public/js/codemirror.min.js"></script>
+<link rel="stylesheet" href="/public/css/editormd.preview.css" />
+<script type="text/javascript">
+	$(function () {
+		$("#article-title").val('<%=Oldessay.essay.title%>')
+		$("input[name=category]").each(function () {
+			if ('<%=Oldessay.category%>' == $(this).attr('value')) {
+				this.checked = true
+				return
+			}
+
+		})
+		var myEditormd;
+		myEditormd = editormd("my-editormd", {
+			width: "100%",
+			height: 740,
+			path: '/public/lib/',
+			markdown: '',
+			codeFold: true,
+			saveHTMLToTextarea: true, // 保存 HTML 到 Textarea  这个配置，方便post提交表单
+			searchReplace: true,
+			imageUpload: true,
+			imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+			imageUploadURL: "/admin/put/essaypic", //图片上传后端接口
+			onload: function () {
+
+			}
+
+		})
+
+
+		//点击提交按钮
+		$("#readyButton").click(function () {
+			var title = $("#article-title").val()
+			var info = myEditormd.getHTML()
+			console.log(info)
+			var markdown = myEditormd.getMarkdown()
+			var category = 1;
+			$("input[name=category]").each(function () {
+				if (this.checked) {
+					category = $(this).attr('value')
+				}
+			})
+
+			if (window.confirm("确认提交？")) {
+				var id = '<%=id%>'
+				$.ajax({
+					type: 'POST',
+					url: '/admin/update-essay',
+					dataType: 'json',
+					data: {
+						"id": id,
+						"info": info,
+						"title": title,
+						"category": category,
+						"markdown": markdown
+					},
+					success: function () {
+						//提交上去
+						if (window.confirm("提交成功")) {
+							setTimeout(() => {
+								window.location.href = "/admin/article"
+							}, 200)
+						}
+					}
+
+				})
+
+			}
+		})
+
+	})
+</script>
+<%-include('f-common');%>
+</body>
+
+</html>

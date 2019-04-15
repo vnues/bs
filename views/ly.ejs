@@ -1,0 +1,200 @@
+<%-include('common');%>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+	<form>
+		<div class="table-responsive">
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th><span class="glyphicon glyphicon-th-large"></span> <span class="visible-lg">选择</span></th>
+
+						<th class="hidden-sm"><span class="glyphicon glyphicon-comment"></span> <span class="visible-lg">评论</span></th>
+						<th><span class="glyphicon glyphicon-time"></span> <span class="visible-lg">日期</span></th>
+						<th><span class="glyphicon glyphicon-pencil"></span> <span class="visible-lg">操作</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<%ly.forEach((item)=>{%>
+					<tr>
+						<td><input type="checkbox" rel="<%=item._id%>" class="input-control" name="checkbox[]" value="" /></td>
+
+						<td class="hidden-sm" style="max-width:200px;overflow: hidden; white-space:nowrap;text-overflow:ellipsis;">
+							<%=item.lyInfo%>
+						</td>
+						<td>
+							<%=item.lyDate%>
+						</td>
+						<td>
+							<a rel="<%=item._id%>">删除</a>
+						</td>
+					</tr>
+					<%})%>
+				</tbody>
+			</table>
+		</div>
+		<footer class="message_footer">
+			<nav>
+				<div class="btn-toolbar operation" role="toolbar">
+					<div class="btn-group" role="group">
+						<a id="selectAll" class="btn btn-default">全选</a>
+						<a class="btn btn-default" id="selectReverse">反选</a>
+						<a class="btn btn-default" id="noSelect" onClick="noselect()">不选</a>
+					</div>
+					<div class="btn-group" role="group">
+						<butto class="btn btn-default checkbox_delete" data-toggle="tooltip" data-placement="bottom" name="checkbox_delete">删除</button>
+					</div>
+				</div>
+				<ul class="pagination pagenav">
+					<li>
+						<a aria-label="Previous" href="/admin/ly?page=<%=page-1%>"> <span aria-hidden="true">&laquo;</span> </a>
+					</li>
+					<!--pages是个数字-->
+					<%for(var i=1;i<=pages;i++){%>
+					<li>
+						<a href="/admin/ly?page=<%=i%>">
+							<%=i%>
+						</a>
+					</li>
+					<%}%>
+
+					<li>
+						<a href="/admin/ly?page=<%=page+1%>" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
+	</form>
+</div>
+</div>
+</section>
+<script>
+	//checkbox业务逻辑多
+	//是否确认删除
+	$(function() {
+		var selectId = [] //选中要删除的数据以数组形式传递
+		
+		//单点
+
+		$("input[type=checkbox]").click(function() {
+
+			var name = $(this);
+			var id = name.attr("rel")
+
+			if(this.checked) {
+				//选中 了 点击增加   本来没选中  点击选中了 就增加
+				selectId.push(id)
+			} else {
+				for(var i = 0; i < selectId.length; i++) {
+					if(selectId[i] == id) {
+
+						//从中删除
+						selectId.splice(i, 1)
+						
+					}
+				}
+
+			}
+			console.log(selectId)
+
+		})
+		//不选
+          $("#noSelect").click(function(){
+        	  selectId = []
+        	  console.log(selectId)
+        })
+		//全选删除
+		$("#selectAll").click(function() {
+			
+				select()
+				selectId = []
+				//拿到全部选中的对象  然后获取id  			
+				$("input[type=checkbox]").each(function() {
+					//这个this是js对象的this 要用jQuery的方法要变化为$(this)jquery对象
+
+					if(this.checked) {
+						
+						var name = $(this);
+						var id = name.attr("rel")
+						//console.log(id)
+						selectId.push(id)
+					}
+
+				})
+				console.log(selectId)
+			
+			
+
+		})
+
+		//反选
+		$("#selectReverse").click(function() {
+			
+				//应该封装一下 共用代码
+				reverse()
+				selectId = []
+				$("input[type=checkbox]").each(function() {
+					//这个this是js对象的this 要用jQuery的方法要变化为$(this)jquery对象
+
+					if(this.checked) {
+						console.log("ok")
+						var name = $(this);
+						var id = name.attr("rel")
+						selectId.push(id)
+					}
+
+				})
+				console.log(selectId)
+			
+
+		
+
+		})
+		//这种方式比较重要的 traditional:true。或者将2、中的 _list参数转换一下$.param(_list,true)。
+		//这里其实就是将_list作为传统的方式传递给后台。Jquery默认是做了转换的。据说是为了使用PHP。。。。后台语言而做的。其实也就是自动在参数后面追加了”[]“。
+
+		$(".checkbox_delete").click(function() {
+			console.log(selectId)
+			  if(selectId.length<1){
+			    	 return 
+			    }
+			if(event.srcElement.outerText == "删除") {
+				if(window.confirm("此操作不可逆，是否确认？")) {
+					$.ajax({
+						type: "POST",
+						url: "/admin/ly/delcheckbox",
+						data: {
+							"id": selectId
+						},
+						dataType: 'json',
+						traditional: true, //不加这个会变量名会出错 --这是个坑
+						success: function(data) {
+							//加个刷新不用操作dom  技巧
+							window.location.reload();
+							selectId = []
+						}
+					});
+				};
+			};
+
+		})
+
+		$("#main table tbody tr td a").click(function() {
+			var name = $(this);
+			var id = name.attr("rel"); //对应id  
+			if(event.srcElement.outerText == "删除") {
+				if(window.confirm("此操作不可逆，是否确认？")) {
+					$.ajax({
+						type: "POST",
+						url: "/admin/ly/del",
+						data: "id=" + id,
+						success: function(data) {
+							//加个刷新不用操作dom  技巧
+							window.location.reload();
+						}
+					});
+				};
+			};
+		});
+	});
+</script>
+
+<%-include('f-common');%>

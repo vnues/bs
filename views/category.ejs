@@ -1,0 +1,241 @@
+<%-include('common');%>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+	
+	<h1 class="page-header">管理 <span class="badge">2</span></h1>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th><span class="glyphicon glyphicon-th-large"></span> <span class="visible-lg">栏目</span></th>
+				
+				</tr>
+			</thead>
+			<tbody>
+				
+				<tr>
+					<td>
+						Web前端
+					</td>
+					
+					<td>
+						<a data-toggle="modal" data-target="#addUser" name="see">修改</a>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Web前端
+					</td>
+					
+					<td>
+						<a data-toggle="modal" data-target="#addUser" name="see">修改</a>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Web前端
+					</td>
+					
+					<td>
+						<a data-toggle="modal" data-target="#addUser" name="see">修改</a>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Web前端
+					</td>
+					
+					<td>
+						<a data-toggle="modal" data-target="#addUser" name="see">修改</a>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Web前端
+					</td>
+					
+					<td>
+						<a data-toggle="modal" data-target="#addUser" name="see">修改</a>
+						
+					</td>
+				</tr>
+				
+			</tbody>
+		</table>
+	</div>
+
+	<style>
+		.pages {
+			float: right;
+			margin-right: 100px;
+		}
+	</style>
+</div>
+</div>
+</section>
+<!--增加用户模态框-->
+<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" display="block">
+	<div class="modal-dialog" role="document" style="max-width:450px;">
+		<form autocomplete="off" draggable="false">
+			<div class="modal-content">
+				
+				<div class="modal-body">
+					<table class="table" style="margin-bottom:0px;">
+						<thead>
+							<tr> </tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td wdith="20%">栏目:</td>
+								<td width="80%"><input type="text" value="" class="form-control" name="username" maxlength="10" autocomplete="off" /></td>
+							</tr>
+							
+							<tr>
+								<td wdith="20%">新栏目:</td>
+								<td width="80%"><input type="password" class="form-control" name="password" maxlength="18" autocomplete="off" /></td>
+							</tr>
+							
+						</tbody>
+						<tfoot>
+							<tr></tr>
+						</tfoot>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="submit" class="btn btn-primary" id="userPost">提交</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	//栏目的话只支持修改就好了    还要做一个签名功能
+	$(function() {
+		//声明用户信息 
+		var isAdd = false //是add还是修改
+		var user = {
+			id: '',
+			username: '',
+			password: '',
+			new_password: '',
+			isAdmin: false
+		}
+		//添加用户   id #adduser 不要跟data-target="#addUser"一致 不然起冲突
+		$("#adduser").click(function() {
+
+			$('[name=username]').val('')
+			$('[name=password]').val('')
+			$('[name=new_password]').val('')
+
+			isAdd = true
+
+		})
+		$("#main table tbody tr td a").click(function() {
+			var name = $(this) //jquery对象
+			user.id = name.attr("rel")
+			console.log(user.id)
+			//点击修改  读取用户数据
+			if(name.attr("name") === "see") {
+				isAdd = false
+				$.ajax({
+					type: "GET",
+					data: {
+						id: user.id
+					},
+					cache: false,
+					url: "/admin/user/see",
+					success: function(data) {
+
+						// data = JSON.parse(data)
+						console.log(data)
+						//填入表单并且赋值user
+						user.id = data._id
+						user.username = data.username
+						user.password = data.password
+						user.isAdmin = data.isAdmin
+						$('[name=username]').val(data.username)
+						$('[name=password]').val(data.password)
+						$('[name=new_password]').val(data.password)
+						let option = data.isAdmin ? 1 : 0
+						$('[name=isAdmin]').val(option)
+					}
+				})
+			} else if(name.attr("name") === "delete") {
+				if(window.confirm("此操作不可逆，是否确认？")) {
+					$.ajax({
+						type: "POST",
+						url: "/admin/user/del",
+						data: {
+							id: user.id
+						},
+						cache: false, //不缓存此页面   
+						success: function(data) {
+							//window.location.reload();
+						}
+					})
+
+				}
+
+			}
+
+		})
+		//修改用户信息
+		//http://localhost:3000/admin/user?username=we&isAdmin=0&password=123&new_password=123
+		//a链接才会跳转  服务器push的页面还是原来页面 不是这个ajax实现变成 (多了edit)http://localhost:3000/admin/user/edit?username=we&isAdmin=0&password=123&new_password=123
+		//发送修改的信息
+
+		$("#userPost").click(function() {
+			//点击修改用户信息    业务逻辑 应该弹出弹出框
+			//let name = $('#main table tbody tr td a');
+			//  user.id = name.attr("rel"); //对应id   
+			//console.log(user.id)
+			user.username = $('[name=username]').val()
+			user.password = $('[name=password]').val()
+			user.new_password = $('[name=new_password]').val()
+			if(user.password != user.new_password) {
+				//两次密码输入不一致
+				window.confirm("两次密码输入不一致")
+				console.log("两次密码输入不一致")
+				return
+			}
+			//报错的原因是let声明
+			var option = $('[name=isAdmin]').val() == 1 ? true : false
+			user.isAdmin = option
+			if(isAdd) {
+				//增加新用户
+
+				$.ajax({
+					type: "POST",
+					url: "/admin/user/add",
+					data: user,
+					cache: false, //不缓存此页面   
+					success: function(data) {
+						//console.log(data)
+
+						$('#seeUser').modal('show');
+					}
+				})
+
+			} else {
+				$.ajax({
+					type: "POST",
+					url: "/admin/user/edit",
+					data: user,
+					cache: false, //不缓存此页面   
+					success: function(data) {
+						console.log(data)
+
+						$('#seeUser').modal('show');
+					}
+				})
+
+			}
+
+		})
+	})
+</script>
+<%-include('f-common');%>
