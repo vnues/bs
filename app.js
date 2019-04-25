@@ -29,7 +29,7 @@ app.use("/uploads", express.static(path.resolve(__dirname + "/uploads")));
 app.use("/api", require("./routers/api"));
 app.use("/admin", require("./routers/admin"));
 app.use("/", require("./routers/main"));
-global.db = mongoose.connect("mongodb://localhost:27017/bs", err => {
+global.db = mongoose.connect("mongodb://localhost:27017/blog", err => {
   if (err) {
     console.log("数据库连接失败");
   } else {
