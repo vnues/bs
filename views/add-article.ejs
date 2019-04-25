@@ -14,7 +14,16 @@
 				<label for="article-content" class="sr-only">内容</label>
 			</div>
 			<!-- markdown编辑器 -->
-			<div id="my-editormd"></div>
+			<div id="my-editormd">
+				<textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;"></textarea>
+				<!-- 注意：name属性的值-->
+				
+			</div>
+             <div id="html-editormd">
+             	 <textarea id="test-editormd-html-code" name="my-editormd-html-code" style="display:none;">
+
+             	 </textarea>
+             </div>
 		</div>
 
 		<div class="col-md-3">
@@ -151,8 +160,8 @@
 			var info = myEditormd.getHTML()
 			var markdown = myEditormd.getMarkdown()
 			console.log("html")
-			console.log(info);
-			console.log(markdown)
+			//console.log(info);
+			//console.log(markdown)
 			var category = 1;
 			$("input[name=category]").each(function () {
 				if (this.checked) {
