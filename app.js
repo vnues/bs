@@ -36,7 +36,7 @@ global.db = mongoose.connect("mongodb://localhost:27017/blog", err => {
     console.log("数据库连接成功");
   }
 });
-// app.listen("3100", () => {
-//   console.log("启动成功");
-// });
+app.listen("3100", () => {
+  console.log("启动成功");
+});
 module.exports = app;
