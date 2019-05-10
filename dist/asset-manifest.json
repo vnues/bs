@@ -8,11 +8,11 @@
   "runtime~main.js": "/static/js/runtime~main.229c360f.js",
   "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
   "static/media/home.scss": "/static/media/home_bg@2x.1e098e58.png",
-  "static/media/app.css": "/static/media/iconfont.357e2715.woff",
+  "static/media/app.css": "/static/media/iconfont.de5cdeea.svg",
   "static/media/charpter.scss": "/static/media/directory.efbf1e66.png",
   "static/css/main.1d09544c.chunk.css.map": "/static/css/main.1d09544c.chunk.css.map",
   "static/css/1.8f58b3a3.chunk.css.map": "/static/css/1.8f58b3a3.chunk.css.map",
   "index.html": "/index.html",
-  "precache-manifest.ec7bb74dc71ec1e9728e94ffb2fad9c9.js": "/precache-manifest.ec7bb74dc71ec1e9728e94ffb2fad9c9.js",
+  "precache-manifest.bf166ad8f19891fe7b1cd8abd41d29fd.js": "/precache-manifest.bf166ad8f19891fe7b1cd8abd41d29fd.js",
   "service-worker.js": "/service-worker.js"
 }
